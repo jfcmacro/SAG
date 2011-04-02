@@ -1,0 +1,50 @@
+cfg = terminals    ["Name"]
+      nonterminals ["Its", "It", "P"] 
+      { "R"          ("P",     [ nt "Its" ]);
+        "ConsIts"    ("Its",   [ nt "It", nt "Its"]); 
+        "NilIts"     ("Its",   [] );
+        "Decl"       ("It",    [ t "Name" ]);
+        "Use"        ("It",    [ t "Name" ]);
+	"Block"      ("It",    [ nt "Its" ])
+      }
+      axiom "P"
+inherited   = { "dcli"; "env"; "lev" }
+synthesized = { "dclo"; "errs"       }
+{ "Its"  inherited   =  {"dcli" : "Env" ; "env" : "Env"; "lev" : "Int"} 
+         synthesized =  {"dclo" : "Env" ; "errs" : "Err" } 
+         local       =  {}
+  ;
+  "It"   inherited   =  {"dcli" : "Env" ; "env" : "Env"; "lev" : "Int"}
+         synthesized =  {"dclo" : "Env" ; "errs" : "Err" }
+         local       =  {}
+  ;
+  "P"    inherited   =  {}
+         synthesized =  {"errs" : "Env" }
+         local       =  {}
+}
+{ "NilIts"  [(<0 "dclo">) "id" <0 "dcli">] ;
+  "ConsIts" [(<1 "dcli">) "id" <0 "dcli">
+            ,(<2 "dcli">) "id" <1 "dclo">
+            ,(<0 "dclo">) "id" <2 "dclo">
+            ,(<1 "env">)  "id" <0 "env">
+            ,(<2 "env">)  "id" <0 "env">
+            ,(<1 "lev">)  "id" <0 "lev">
+            ,(<2 "lev">)  "id" <0 "lev">
+            ,(<0 "errs">) "++" <1 "errs"> <2 "errs">
+            ] ;
+  "Use"     [(<0 "dclo">) "id" <0 "dcli">
+            ,(<0 "errs">) "f2" [t "Name"] <0 "env">
+            ] ;
+  "Decl"    [(<0 "dclo">) "f1" [t "Name"] <0 "lev"> <0 "dcli">
+            ,(<0 "errs">) "f3" [t "Name"] <0 "lev"> <0 "dcli">
+            ] ;
+  "Block"   [(<0 "dclo">) "id" <0 "dcli">
+            ,(<1 "dcli">) "id" <0 "env">
+            ,(<1 "env">)  "id" <1 "dclo">
+            ,(<1 "lev">)  "incr" <0 "lev">
+            ,(<0 "errs">) "id" <1 "errs">
+            ];
+  "R"       [(<1 "env">)  "id" <1 "dclo">
+            ,(<0 "errs">) "id" <1 "errs">
+            ]
+}
