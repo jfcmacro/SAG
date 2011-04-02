@@ -1,0 +1,3 @@
+:set -package mtl-1.1.0.2
+:set -hide-package monads-fd-0.1.0.1
+:set -i../src

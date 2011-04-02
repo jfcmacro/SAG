@@ -1,0 +1,21 @@
+name: SAG
+version: 0.1.0
+cabal-version: >= 1.2
+license: GPL
+license-file: LICENSE
+copyright: (c) 2010 Juan Francisco Cardona McCormick
+author:     Juan Francisco Cardona McCormick <fcardona@eafit.edu.co>
+maintainer: Juan Francisco Cardona McCormick <fcardona@eafit.edu.co>
+stability:  Experimental
+build-type: Simple
+extra-source-files: 
+synopsis:   An simple implementation of attribute grammars only for experimenting
+description:
+category:   Not yet defined.
+
+executable:     sag
+build-depends:  base, mtl, haskell98, containers, uulib
+main-is:        Main.hs
+hs-source-dirs: src
+other-modules:  
+

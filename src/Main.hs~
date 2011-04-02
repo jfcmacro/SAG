@@ -1,0 +1,37 @@
+module Main where
+
+import CFG 
+import AG
+import AGParser
+import DirectDependencies(dp)
+import System(getArgs)
+import IO(stderr,hPutStr)
+
+process :: FilePath -> IO ()
+process f = do 
+  s <- readFile f
+  a <- parseIOAG (scanAG f s)
+  let pr = dp (sem a)
+  print "printing the set of DP(p)"
+  print pr
+  let iswd = isCFGWellDefined (cfg a)  
+  either (print) (print) iswd
+  let occurPR_consits = occurPR_p "ConsIts" (prods (cfg a)) (inhSynLocAttrTypes_X (attrs a))
+  print occurPR_consits
+
+use :: String -> String
+use msg = "Usage: sag <filepath> " ++ "\n" ++ msg 
+
+usage :: String -> IO ()
+usage msg = do
+  hPutStr stderr (use msg)
+
+main :: IO ()
+main = do
+  args <- getArgs
+  if length args /= 1
+   then usage ""
+   else do let ifile = args !! 0
+           process ifile `catch` handle
+           return ()
+               where handle e = hPutStr stderr (show e)
